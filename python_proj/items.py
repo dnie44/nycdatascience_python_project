@@ -6,8 +6,8 @@
 import scrapy
 
 
-class PythonProjItem(scrapy.Item):
+class TV_Item(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    prod_sku = scrapy.Field()
-    prod_name= scrapy.Field()
+    tv_category = scrapy.Field()
+    category_id = scrapy.Field()

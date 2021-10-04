@@ -7,7 +7,7 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'python_proj'
+BOT_NAME = 'bb'
 
 SPIDER_MODULES = ['python_proj.spiders']
 NEWSPIDER_MODULE = 'python_proj.spiders'
@@ -62,9 +62,10 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'python_proj.pipelines.PythonProjPipeline': 300,
-#}
+
+ITEM_PIPELINES = {
+    'python_proj.pipelines.BBPipeline': 100,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

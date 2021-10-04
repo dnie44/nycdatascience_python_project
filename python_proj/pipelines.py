@@ -6,8 +6,21 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+from scrapy.exporters import CsvItemExporter
 
+class BBPipeline:
+    def __init__(self):
+        self.filename = 'bb_data.csv'
 
-class PythonProjPipeline:
+    def open_spider(self, spider):
+        self.csvfile = open(self.filename, 'wb')
+        self.exporter = CsvItemExporter(self.csvfile)
+        self.exporter.start_exporting()
+
+    def close_spider(self, spider):
+        self.exporter.finish_exporting()
+        self.csvfile.close()
+
     def process_item(self, item, spider):
+        self.exporter.export_item(item)
         return item
