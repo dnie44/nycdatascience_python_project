@@ -7,7 +7,7 @@ from python_proj.spiders.myAPIkey import getkey
 myAPIkey = getkey()                             # load in my API key
 bb_category = '(categoryPath.id=abcat0101000)'  # category id for TV & Home Theater (from Bestbuy's API documentation)
 sort = 'customerReviewAverage.dsc'              # sort by setting
-psize = 'pageSize=1'                          # set # of results per API get (max 100)
+psize = 'pageSize=100'                          # set # of results per API get (max 100)
 attributes = [
     'class',
     'subclass',
@@ -31,13 +31,17 @@ def remove_linebreak(s):
 # initialize the TV item
 tv_item = TV_Item()
 
+# set beginning API url
+url_head = f'https://api.bestbuy.com/v1/products({bb_category})?apiKey={myAPIkey}&sort={sort}&show={attrib_query}&{psize}'
+
 class BBSpider(scrapy.Spider):
     name = 'bb_spider'
     allowed_domains = ['api.bestbuy.com/']
-    #start_urls = [f'https://api.bestbuy.com/v1/products/mostViewed(categoryId=abcat0101000)?apiKey={myAPIkey}']
-    #start_urls = [f'https://api.bestbuy.com/v1/categories(id=abcat*)?apiKey={myAPIkey}&show=id,name&format=json']
-    #start_urls = [f'https://api.bestbuy.com/v1/{bb_category}?apiKey={myAPIkey}&{psize}&show=subCategories.name,subCategories.id&format=json']
-    start_urls = [f'https://api.bestbuy.com/v1/products({bb_category})?apiKey={myAPIkey}&sort={sort}&show={attrib_query}&{psize}&page=2&format=json']
+    #start_urls = [f'{url_head}&page=2&format=json']
+
+    def start_requests(self):
+        for i in range(1,6):
+            yield scrapy.Request(url=f'{url_head}&page={str(i)}&format=json',callback = self.parse)
 
     def parse(self, response):
         res = json.loads(response.body)
