@@ -9,5 +9,16 @@ import scrapy
 class TV_Item(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    tv_category = scrapy.Field()
-    category_id = scrapy.Field()
+    top_class = scrapy.Field()
+    sub_class = scrapy.Field()
+    tv_name = scrapy.Field()
+    manufacturer = scrapy.Field()
+    color = scrapy.Field()
+    customerReviewAverage = scrapy.Field()
+    customerReviewCount = scrapy.Field()
+    features = scrapy.Field()               # features is a nested dictionary from Bestbuy API pull
+    modelNumber = scrapy.Field()
+    regularPrice = scrapy.Field()
+    salePrice = scrapy.Field()
+    sku = scrapy.Field()
+    longDescription = scrapy.Field()
