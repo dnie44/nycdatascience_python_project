@@ -16,7 +16,15 @@ class TV_Item(scrapy.Item):
     color = scrapy.Field()
     customerReviewAverage = scrapy.Field()
     customerReviewCount = scrapy.Field()
-    features = scrapy.Field()               # features is a nested dictionary from Bestbuy API pull
+    # TV Features is a nested dictionary, max of 8
+    feat1 = scrapy.Field()
+    feat2 = scrapy.Field()
+    feat3 = scrapy.Field()
+    feat4 = scrapy.Field()
+    feat5 = scrapy.Field()
+    feat6 = scrapy.Field()
+    feat7 = scrapy.Field()
+    feat8 = scrapy.Field()
     modelNumber = scrapy.Field()
     regularPrice = scrapy.Field()
     salePrice = scrapy.Field()

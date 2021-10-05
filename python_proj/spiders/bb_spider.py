@@ -7,8 +7,8 @@ from python_proj.spiders.myAPIkey import getkey
 myAPIkey = getkey()                             # load in my API key
 bb_category = '(categoryPath.id=abcat0101000)'  # category id for TV & Home Theater (from Bestbuy's API documentation)
 sort = 'customerReviewAverage.dsc'              # sort by setting
-psize = 'pageSize=100'                          # set # of results per API get (max 100)
-attribs = [
+psize = 'pageSize=1'                          # set # of results per API get (max 100)
+attributes = [
     'class',
     'subclass',
     'name',
@@ -23,7 +23,10 @@ attribs = [
     'sku',
     'longDescription'
 ]                                               # list of desired TV data
-attrib_query = ','.join(attribs)                # join desired data into url string
+attrib_query = ','.join(attributes)                # join desired data into url string
+
+def remove_linebreak(s):
+    return ' '.join(s.split('\n'))
 
 # initialize the TV item
 tv_item = TV_Item()
@@ -39,19 +42,25 @@ class BBSpider(scrapy.Spider):
     def parse(self, response):
         res = json.loads(response.body)
         print(res['products'])
-        for each in res['products']:
-            tv_item['top_class'] = each['class']
-            tv_item['sub_class'] = each['subclass']
-            tv_item['tv_name'] = each['name']
-            tv_item['manufacturer'] = each['manufacturer']
-            tv_item['color'] = each['color']
-            tv_item['customerReviewAverage'] = each['customerReviewAverage']
-            tv_item['customerReviewCount'] = each['customerReviewCount']
-            tv_item['features'] = each['features']
-            tv_item['modelNumber'] = each['modelNumber']
-            tv_item['regularPrice'] = each['regularPrice']
-            tv_item['salePrice'] = each['salePrice']
-            tv_item['sku'] = each['sku']
-            tv_item['longDescription'] = each['longDescription']
+        for attrib in res['products']:
+            tv_item['top_class'] = attrib['class']
+            tv_item['sub_class'] = attrib['subclass']
+            tv_item['tv_name'] = attrib['name']
+            tv_item['manufacturer'] = attrib['manufacturer']
+            tv_item['color'] = attrib['color']
+            tv_item['customerReviewAverage'] = attrib['customerReviewAverage']
+            tv_item['customerReviewCount'] = attrib['customerReviewCount']
+            # Nested features.feature needs iteration
+            for idx in range(8):
+                try: 
+                    tv_item['feat'+str(idx+1)] = remove_linebreak(attrib['features'][idx]['feature'])
+                except:
+                    tv_item['feat'+str(idx+1)] = ''
+
+            tv_item['modelNumber'] = attrib['modelNumber']
+            tv_item['regularPrice'] = attrib['regularPrice']
+            tv_item['salePrice'] = attrib['salePrice']
+            tv_item['sku'] = attrib['sku']
+            tv_item['longDescription'] = attrib['longDescription']
             
             yield tv_item
