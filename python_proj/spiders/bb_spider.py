@@ -57,7 +57,7 @@ class BBSpider(scrapy.Spider):
             tv_item['color'] = attrib['color']
             tv_item['review_average'] = attrib['customerReviewAverage']
             tv_item['review_count'] = attrib['customerReviewCount']
-            # Nested features.feature needs iteration
+            # Nested features.feature needs iteration, max of 8 features
             for idx in range(8):
                 try: 
                     tv_item['feat'+str(idx+1)] = remove_linebreak(attrib['features'][idx]['feature'])
@@ -72,19 +72,26 @@ class BBSpider(scrapy.Spider):
             tv_item['store_avail'] = attrib['inStoreAvailability']
             tv_item['online_avail'] = attrib['onlineAvailability']
             # Nested details.values needs iteration & checks
-            num_dets = len(attrib['details'])
-            tv_item['screen_size']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Screen Size Class'][0]
-            tv_item['curved']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Curved Screen'][0]
-            tv_item['resolution']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Resolution'][0]
-            tv_item['warranty']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == "Manufacturer's Warranty - Parts"][0]
-            tv_item['energy_eff']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Estimated Annual Electricity Use'][0]
-            tv_item['display_type']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Display Type'][0]
-            tv_item['model_year']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Model Year'][0]
-            tv_item['brightness']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Brightness'][0]
-            tv_item['width']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Product Width'][0]
-            tv_item['height_nostand']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Product Height Without Stand'][0]
-            tv_item['weight_nostand']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Product Weight Without Stand'][0]
-            tv_item['smart_capable']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Smart Capable'][0]
-            tv_item['refresh_rate']=[attrib['details'][i]['value'] for i in range(num_dets) if attrib['details'][i]['name'] == 'Refresh Rate'][0]
+            attrib_dets = attrib['details']              # response item
+            num_dets = len(attrib['details'])       # number of different details
+            det_match = {
+                'screen_size':'Screen Size Class',
+                'curved':'Curved Screen',
+                'resolution':'Resolution',
+                'warranty':"Manufacturer's Warranty - Parts",
+                'energy_eff':'Estimated Annual Electricity Use',
+                'display_type':'Display Type',
+                'model_year':'Model Year',
+                'brightness':'Brightness',
+                'width':'Product Width',
+                'height_nostand':'Product Height Without Stand',
+                'weight_nostand':'Product Weight Without Stand',
+                'smart_capable':'Smart Capable',
+                'refresh_rate':'Refresh Rate'
+            }
+            
+            for item, pull in det_match.items():
+                tmp = [attrib_dets[i]['value'] for i in range(num_dets) if attrib_dets[i]['name']==pull]
+                tv_item[item] = tmp[0] if tmp else ''
 
             yield tv_item
