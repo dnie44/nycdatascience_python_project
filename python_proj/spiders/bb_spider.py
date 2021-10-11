@@ -48,6 +48,7 @@ class BBSpider(scrapy.Spider):
 
     def parse(self, response):
         res = json.loads(response.body)
+        #print(res)
         print(res['products'])
         for attrib in res['products']:
             tv_item['top_class'] = attrib['class']
