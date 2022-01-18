@@ -7,6 +7,9 @@ Using Bestbuy.com's online retail data, this project seeked to gain insight on t
 
 Bestbuy is a specialty retailer focused on consumer electronics, and its online shop is considered the best platform for buying TVs (behind Amazon and Walmart, both of which do not specialize in electronics)†.
 
+Accompanying Tableau Dashboard:<br>
+https://public.tableau.com/app/profile/daniel.nie6602/viz/TheTVMarket/Dashboard1
+
 The project presentation can be viewed at:<br>
 https://docs.google.com/presentation/d/1UmDxi_DMy1rxgvRJ9dv-wPnyzaPeoxewwhyki8wDgyg/
 
